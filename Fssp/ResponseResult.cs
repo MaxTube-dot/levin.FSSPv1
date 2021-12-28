@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,16 +48,21 @@ namespace Fssp
     /// </summary>
     public class ResultTask
     {
-        
+
         [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Always)]
         public int Status { get; set; }
 
         [Newtonsoft.Json.JsonProperty("query", Required = Newtonsoft.Json.Required.Always)]
         public Query Query { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("result", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("result", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore),]
+     
         public RecordFssp[] RecordsFssp { get; set; }
     }
+
+
+
+
 
     /// <summary>
     /// Параметры поиска записи в БД ФССП, с информацией о типе искомого объекта.
@@ -70,9 +76,9 @@ namespace Fssp
         /// 3 = поиск по исполнителному договору.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("type")]
-        public int Type { get; set; }
+        public int? Type { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("_params",NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("_params", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public QueryParams Params { get; set; }
     }
 
@@ -84,23 +90,26 @@ namespace Fssp
         [Newtonsoft.Json.JsonProperty("name", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("region", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Region { get; set; }
+
 
         [Newtonsoft.Json.JsonProperty("firstname", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string FirstName { get; set; }
 
         [Newtonsoft.Json.JsonProperty("lastname", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string LastName { get; set; }
+        [Newtonsoft.Json.JsonProperty("secoundname", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SecoundName { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("Number", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("region", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Region { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("number", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Number { get; set; }
 
         [Newtonsoft.Json.JsonProperty("birthdate", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string DirthDate { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("secoundname", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SecoundName { get; set; }
+
     }
 
     /// <summary>
@@ -126,9 +135,12 @@ namespace Fssp
         [Newtonsoft.Json.JsonProperty("bailiff", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Bailiff { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ip_end",NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("ip_end", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string IIpEnd { get; set; }
     }
+
+
+
 
 
 

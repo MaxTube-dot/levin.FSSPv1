@@ -1,26 +1,30 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using Newtonsoft.Json;
 using Fssp;
+using NLog;
 
 namespace levin.FSSPv1
 {
     partial class Program
     {
+
+
         static void Main(string[] args)
         {
+            var logger = LogManager.GetCurrentClassLogger();
+
+            logger.Debug("Собрал");
+
             SearchClient searchClient = new SearchClient();
 
             string token = "DIWmQoRIZ5sD";
 
             List<string> tasks = new List<string>();
 
-            tasks.Add(searchClient.Physical(token: token, region: 46, firstName: "Илья", lastName: "Левин", secondName: "Владимирович", birthDate: "01.11.1999"));
+           // tasks.Add(searchClient.Physical(token: token, region: 46, firstName: "Илья", lastName: "Левин", secondName: "Владимирович", birthDate: "01.11.1999"));
 
             //Генерация пользователей для группового запроса.
 
-            RequestParams request = new RequestParams();
+            
 
             string[] names = new string[] { "Максим", "Илья", "Даниил", "Владимир", "Артем", "Андрей", "Геннадий" };
 
@@ -30,34 +34,32 @@ namespace levin.FSSPv1
 
             string[] dates = new string[] { "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999" };
 
-            List<QueryParams> peoples = new List<QueryParams>();
+            List<Params> peoples = new List<Params>();
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 7; i++)
             {
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 7; j++)
                 {
-                    peoples.Add(new QueryParams { FirstName = names[i], LastName = lastNames[j], SecoundName = secoundNames[j], DirthDate = dates[i], Region = "46" });
+                    peoples.Add(new Params { FirstName = names[i], LastName = lastNames[j], SecondName = secoundNames[j], BirthDate = dates[i], Region = "46" });
                 }
 
             }
 
-            GroupQuery groupQuery = new GroupQuery
-            {
-                Token = token,
-                Request = new List<Params>
-                {
-                    new Params {
-                        Request = new List<RequestParams> {
-                            new RequestParams() {
-                                Type = 1,
-                                Params=  peoples
-                            }
-                        }
-                    }
-                }
-            };
 
-            tasks.Add(searchClient.Group(groupQuery));
+            
+
+            List<Request> requests = new List<Request>();
+
+            foreach (var item in peoples)
+            {
+                requests.Add(new Request() { Params = item, Type = 1 });
+            }
+            GroupRequest groupRequest = new GroupRequest() { Token = token,Request= requests.ToArray() };
+            
+
+           // groupQuer1y.Request.Add( new Params);
+
+            tasks.Add(searchClient.Group(groupRequest));
 
             // Task с готовым результатом. После 13 часов может быть битым!
 

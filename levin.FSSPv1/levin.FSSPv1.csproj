@@ -7,9 +7,14 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog" Version="4.7.13" />
+    <PackageReference Include="NLog.Config" Version="4.7.13" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="C:\Users\admin\.nuget\packages\nlog.config\4.7.13\contentFiles\any\any\NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="json1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
