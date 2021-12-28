@@ -9,7 +9,6 @@ namespace levin.FSSPv1
     {
         public class SearchClient
         {
-            private HttpClient _httpClient;
 
             public string BaseUrl { get; set; } = "https://api-ip.fssp.gov.ru/api/v1.0/";
 
@@ -102,6 +101,100 @@ namespace levin.FSSPv1
 
             }
 
+
+            public string Group(GroupQuery query)
+            {
+                if (query == null)
+                    throw new System.ArgumentException("query");
+
+                var urlBuilder_ = new System.Text.StringBuilder();
+                urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/search/group");
+
+                using (var request_ = new HttpRequestMessage())
+                {
+                    var content_ = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(query));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    WebClient webClient = new WebClient();
+
+                    HttpClient client_ = new HttpClient();
+
+                    var url_ = urlBuilder_.ToString();
+
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    var response_ = client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(true).GetAwaiter().GetResult().Content.ReadAsStringAsync().Result;
+
+                    JObject json = JObject.Parse(response_);
+
+                    var code = int.Parse(json["code"].ToString());
+
+                    if (code == 0)
+                    {
+                        string task = json["response"]["task"].ToString();
+
+                        return task;
+                    }
+
+                    if (code == 401)
+                    {
+                        throw new ApiException("Token is invalid!", code, response_);
+                    }
+                    else
+                    {
+                        throw new ApiException("The HTTP status code of the response was not expected!", code, response_);
+                    }
+
+                }
+
+            }
+        }
+        public class GroupQuery
+        {
+
+
+            /// <summary>
+            /// Ключ доступа к API
+            /// </summary>
+            [Newtonsoft.Json.JsonProperty("token", Required = Newtonsoft.Json.Required.Always)]
+            [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+            public string Token { get; set; }
+
+            /// <summary>
+            /// Параметры запроса
+            /// </summary>
+            [Newtonsoft.Json.JsonProperty("request", Required = Newtonsoft.Json.Required.Always)]
+            [System.ComponentModel.DataAnnotations.Required]
+            public System.Collections.Generic.ICollection<Params> Request { get; set; } = new System.Collections.ObjectModel.Collection<Params>();
+        }
+
+        public class Params
+        {
+            [Newtonsoft.Json.JsonProperty("requestByIp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+            public System.Collections.Generic.ICollection<RequestParams> Request { get; set; }
+
+        }
+
+        public partial class RequestParams
+        {
+            /// <summary>
+            /// Тип запроса
+            /// </summary>
+            [Newtonsoft.Json.JsonProperty("type", Required = Newtonsoft.Json.Required.Always)]
+            public int Type { get; set; }
+
+            /// <summary>
+            /// Параметры запроса
+            /// </summary>
+            [Newtonsoft.Json.JsonProperty("params", Required = Newtonsoft.Json.Required.Always)]
+            [System.ComponentModel.DataAnnotations.Required]
+            public System.Collections.Generic.ICollection<QueryParams> Params { get; set; } = new System.Collections.ObjectModel.Collection<QueryParams>();
         }
     }
+
+
+    
 }

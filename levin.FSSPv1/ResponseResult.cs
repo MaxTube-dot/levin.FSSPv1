@@ -93,8 +93,14 @@ namespace levin.FSSPv1
         [Newtonsoft.Json.JsonProperty("lastname", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string LastName { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("number", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("Number", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Number { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("birthdate", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string DirthDate { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("secoundname", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SecoundName { get; set; }
     }
 
     /// <summary>

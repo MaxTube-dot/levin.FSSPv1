@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 
 using Newtonsoft.Json;
@@ -13,10 +14,53 @@ namespace levin.FSSPv1
 
             string token = "DIWmQoRIZ5sD";
 
-            var task = searchClient.Physical(token: token, region: 46, firstName: "Илья", lastName: "Левин", secondName: "Владимирович", birthDate: "01.11.1999");
+            List<string> tasks = new List<string>();
+
+            tasks.Add(searchClient.Physical(token: token, region: 46, firstName: "Илья", lastName: "Левин", secondName: "Владимирович", birthDate: "01.11.1999"));
+
+            //Генерация пользователей для группового запроса.
+            RequestParams request = new RequestParams();
+
+            string[] names = new string[] { "Максим", "Илья", "Даниил", "Владимир", "Артем", "Андрей", "Геннадий" };
+
+            string[] lastNames = new string[] { "Прокофьев", "Зиновьев", "Артеменко", "Баклаков", "Семен", "Синий", "Белоконь" };
+
+            string[] secoundNames = new string[] { "Владимирович", "Андреевич", "Романович", "Константинович", "Маратович", "Васильевич", "Евгеньевич" };
+
+            string[] dates = new string[] { "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999", "01.11.1999" };
+
+            List<QueryParams> peoples = new List<QueryParams>();
+
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    peoples.Add(new QueryParams { FirstName = names[i], LastName = lastNames[j], SecoundName = secoundNames[j], DirthDate = dates[i], Region = "46" });
+                }
+
+            }
+
+            GroupQuery groupQuery = new GroupQuery
+            {
+                Token = token,
+                Request = new List<Params>
+                {
+                    new Params {
+                        Request = new List<RequestParams> {
+                            new RequestParams() {
+                                Type = 1,
+                                Params=  peoples
+                            }
+                        }
+                    }
+                }
+            };
 
 
-            //var task = "86b16aaa-ce53-4f62-91d4-a730bc868328"; //с готовым результатом.
+            tasks.Add(searchClient.Group(groupQuery));
+
+            //var tasks.add("86b16aaa-ce53-4f62-91d4-a730bc868328"); //с готовым результатом.
+
 
 
             System.Console.WriteLine("Запрос отправлен");
@@ -25,20 +69,36 @@ namespace levin.FSSPv1
 
             while (true)
             {
-                var status = client.GetStatus(token, task);
-
-                System.Console.WriteLine(status.ToString());
-
-                if (status.Status == StatusTaskEnum.Ready)
+                for (int i = 0; i < tasks.Count; i++)
                 {
-                    break;
+                    var status = client.GetStatus(token, tasks[i]);
+
+                    System.Console.WriteLine($"{tasks[i]} - {status.ToString()}");
+
+                    if (status.Status == StatusTaskEnum.Ready)
+                    {
+                        ShowResult(token, tasks[i]);
+
+                        tasks.Remove(tasks[i]);
+
+                        break;
+                    }
+
                 }
 
+                System.Console.WriteLine("_____");
                 /// Тайм-аут задежки между запросами.
                 System.Threading.Thread.Sleep(60000);
             }
 
-            var result = client.GetResults(token, task);
+         
+
+        }
+        public static void ShowResult(string token, string task)
+        {
+            Client client = new Client();
+
+            var result = client.GetResults(token,task);
 
             System.Console.WriteLine($"Время начала {result.TaskStart}");
 
@@ -48,28 +108,28 @@ namespace levin.FSSPv1
             {
                 System.Console.WriteLine($"Тип запроса {resultTask.Query.Type}");
 
-                if (resultTask.RecordsFssp.Length==0)
+                if (resultTask.RecordsFssp.Length == 0)
                 {
                     System.Console.WriteLine($"Записей нет.");
                 }
                 else
                 {
-                foreach (var RecordFssp in resultTask.RecordsFssp) //не уверен в смысловой нагрузке свойств
-                {
-                    System.Console.WriteLine($"Имя {RecordFssp.Name ?? ""}");
+                    foreach (var RecordFssp in resultTask.RecordsFssp) //не уверен в смысловой нагрузке свойств
+                    {
+                        System.Console.WriteLine($"Имя {RecordFssp.Name ?? ""}");
 
-                    System.Console.WriteLine($"Номер договора {RecordFssp.Details ?? ""}");
+                        System.Console.WriteLine($"Номер договора {RecordFssp.Details ?? ""}");
 
-                    System.Console.WriteLine($"Исполнительный лист {RecordFssp.ExeProduction ?? ""}");
+                        System.Console.WriteLine($"Исполнительный лист {RecordFssp.ExeProduction ?? ""}");
 
-                    System.Console.WriteLine($"Предмет {RecordFssp.Subject ?? ""}");
+                        System.Console.WriteLine($"Предмет {RecordFssp.Subject ?? ""}");
 
-                    System.Console.WriteLine($"bailiff {RecordFssp.Bailiff ?? ""}");
+                        System.Console.WriteLine($"bailiff {RecordFssp.Bailiff ?? ""}");
 
-                    System.Console.WriteLine($"ip_end {RecordFssp.IIpEnd ?? ""}");
+                        System.Console.WriteLine($"ip_end {RecordFssp.IIpEnd ?? ""}");
 
-                    System.Console.WriteLine("----");
-                }
+                        System.Console.WriteLine("----");
+                    }
                 }
 
                 System.Console.WriteLine();
@@ -79,9 +139,7 @@ namespace levin.FSSPv1
 
 
 
-
         }
-
 
     }
 
