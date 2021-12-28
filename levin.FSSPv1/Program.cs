@@ -59,7 +59,8 @@ namespace levin.FSSPv1
 
             tasks.Add(searchClient.Group(groupQuery));
 
-            //с готовым результатом.
+            // Task с готовым результатом. После 13 часов может быть битым!
+
             tasks.Add("86b16aaa-ce53-4f62-91d4-a730bc868328"); 
 
             System.Console.WriteLine("Запрос отправлен");
