@@ -4,7 +4,7 @@ using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace levin.FSSPv1
+namespace Fssp
 {
 
    

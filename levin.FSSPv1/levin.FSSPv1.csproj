@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Новая папка\" />
+    <ProjectReference Include="..\Fssp\Fssp.csproj" />
   </ItemGroup>
 
 </Project>

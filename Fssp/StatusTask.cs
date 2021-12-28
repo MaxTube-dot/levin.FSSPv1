@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace levin.FSSPv1
+namespace Fssp
 {
 
     public enum StatusTaskEnum
     {
-        Ready,
-        InWork,
-        Wait,
-        ReadyWithError
+        Ready=0,
+        InWork=1,
+        Wait=2,
+        ReadyWithError=3
 
     }
 
@@ -42,19 +42,18 @@ namespace levin.FSSPv1
 
             switch ((int)Status)
             {
+                case 0:
+                    result = $"Запрос выполнен! Выполнено {TasksDone}/{TotalTasks} задач.";
+                    break;
                 case 1:
-                    result = $"Запрос выполнен!Выполнено {TasksDone}/{TotalTasks} задач.";
+                    result = $"Запрос выполняется! Выполнено {TasksDone}/{TotalTasks} задач.";
                     break;
-
                 case 2:
-                    result = $"Запрос выполняется!Выполнено {TasksDone}/{TotalTasks} задач.";
-                    break;
-                case 3:
-                    result = $"Запрос в очереди на выполнение!Выполнено {TasksDone}/{TotalTasks} задач.";
+                    result = $"Запрос в очереди на выполнение! Выполнено {TasksDone}/{TotalTasks} задач.";
                     break;
 
-                case 4:
-                    result = $"Запрос выполнен частично, возможно с ошибками!Выполнено {TasksDone}/{TotalTasks} задач.";
+                case 3:
+                    result = $"Запрос выполнен частично, возможно с ошибками! Выполнено {TasksDone}/{TotalTasks} задач.";
                     break;
             }
 

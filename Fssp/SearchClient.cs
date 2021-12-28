@@ -3,10 +3,9 @@ using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 
-namespace levin.FSSPv1
+namespace Fssp
 {
-    partial class Program
-    {
+   
         public class SearchClient
         {
 
@@ -193,7 +192,7 @@ namespace levin.FSSPv1
             [System.ComponentModel.DataAnnotations.Required]
             public System.Collections.Generic.ICollection<QueryParams> Params { get; set; } = new System.Collections.ObjectModel.Collection<QueryParams>();
         }
-    }
+    
 
 
     

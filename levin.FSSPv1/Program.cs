@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-
 using Newtonsoft.Json;
+using Fssp;
 
 namespace levin.FSSPv1
 {
@@ -19,6 +19,7 @@ namespace levin.FSSPv1
             tasks.Add(searchClient.Physical(token: token, region: 46, firstName: "Илья", lastName: "Левин", secondName: "Владимирович", birthDate: "01.11.1999"));
 
             //Генерация пользователей для группового запроса.
+
             RequestParams request = new RequestParams();
 
             string[] names = new string[] { "Максим", "Илья", "Даниил", "Владимир", "Артем", "Андрей", "Геннадий" };
@@ -56,12 +57,10 @@ namespace levin.FSSPv1
                 }
             };
 
-
             tasks.Add(searchClient.Group(groupQuery));
 
-            //var tasks.add("86b16aaa-ce53-4f62-91d4-a730bc868328"); //с готовым результатом.
-
-
+            //с готовым результатом.
+            tasks.Add("86b16aaa-ce53-4f62-91d4-a730bc868328"); 
 
             System.Console.WriteLine("Запрос отправлен");
 
@@ -69,24 +68,8 @@ namespace levin.FSSPv1
 
             while (true)
             {
-                for (int i = 0; i < tasks.Count; i++)
-                {
-                    var status = client.GetStatus(token, tasks[i]);
+                ShowStatus( token,  tasks,  client);
 
-                    System.Console.WriteLine($"{tasks[i]} - {status.ToString()}");
-
-                    if (status.Status == StatusTaskEnum.Ready)
-                    {
-                        ShowResult(token, tasks[i]);
-
-                        tasks.Remove(tasks[i]);
-
-                        break;
-                    }
-
-                }
-
-                System.Console.WriteLine("_____");
                 /// Тайм-аут задежки между запросами.
                 System.Threading.Thread.Sleep(60000);
             }
@@ -94,9 +77,38 @@ namespace levin.FSSPv1
          
 
         }
-        public static void ShowResult(string token, string task)
+        public static void  ShowStatus(string token,List<string> tasks, Client client )
         {
-            Client client = new Client();
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                var status = client.GetStatus(token, tasks[i]);
+
+                string b = status.ToString();
+
+                string a = $"{tasks[i]} - {b}";
+
+                System.Console.WriteLine(a);
+
+                if (status.Status == StatusTaskEnum.Ready)
+                {
+                    ShowResult(token, tasks[i], client);
+
+                    tasks.Remove(tasks[i]);
+
+                    break;
+                }
+
+            }
+
+            System.Console.WriteLine("_____");
+        }
+
+        public static void ShowResult(string token, string task, Client client)
+        {
+            System.Console.WriteLine();
+
+            System.Console.WriteLine($"Информация по task {task}");
 
             var result = client.GetResults(token,task);
 
@@ -127,14 +139,11 @@ namespace levin.FSSPv1
                         System.Console.WriteLine($"bailiff {RecordFssp.Bailiff ?? ""}");
 
                         System.Console.WriteLine($"ip_end {RecordFssp.IIpEnd ?? ""}");
-
-                        System.Console.WriteLine("----");
                     }
                 }
 
                 System.Console.WriteLine();
 
-                System.Console.WriteLine("----");
             }
 
 

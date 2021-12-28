@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace levin.FSSPv1
+namespace Fssp
 {
 
     public class ApiException : Exception
