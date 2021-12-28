@@ -41,16 +41,22 @@ namespace levin.FSSPv1
 
 
 
-
             Client client = new Client();
 
             while (true)
             {
+
                 foreach (var taslId in _tasksIds)
                 {
-                    StatusTaskEnum = ShowStatus(taslId);
-                }
+                    StatusTaskEnum statusTask = client.GetStatus(Token, taslId).Status;
 
+                    Console.WriteLine(statusTask.ToString());
+
+                    if (statusTask == StatusTaskEnum.Ready)
+                    {
+                        ShowResult(Token, taslId, client);
+                    }
+                }
                 /// Тайм-аут задежки между запросами.
                 System.Threading.Thread.Sleep(60000);
             }
@@ -60,18 +66,8 @@ namespace levin.FSSPv1
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="client"></param>
-        public static StatusTaskEnum GetStatus(string token,string taskId,Client client )
-        {
-
-            var status = client.GetStatus(Token, taskId);
-
-            Console.WriteLine(status.ToString());
-           
-        }
+         
+        
 
         private static Person[] GenerateRandomPersons()
         {
