@@ -61,7 +61,10 @@ namespace Fssp
 
             urlBuilder_.Append(System.Uri.EscapeDataString("birthdate") + "=").Append(Uri.EscapeDataString(birthDate));
 
+            try
+            {
 
+            
             using (var client = new WebClient())
             {
 
@@ -90,6 +93,13 @@ namespace Fssp
                 {
                     throw new ApiException("The HTTP status code of the response was not expected!", code, responseText_);
                 }
+            }
+            }
+            catch (WebException ex)
+            {
+              
+                throw new ApiException(ex.Message);
+               
             }
 
         }
