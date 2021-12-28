@@ -26,19 +26,19 @@ namespace Fssp
         /// <returns>При успешном выполнении запроса пользователю вернётся Task UUID, по которому он сможет получить статус и результат выполнения задачи</returns>
         public string Physical(string token, int region, string firstName, string secondName, string lastName, string birthDate)
         {
-            if (String.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(token))
                 throw new ArgumentException("token");
 
             if (region > 1 && region > 99)
                 throw new ArgumentException("region");
 
-            if (String.IsNullOrEmpty(firstName))
+            if (string.IsNullOrEmpty(firstName))
                 throw new ArgumentException("firstName");
 
-            if (String.IsNullOrEmpty(lastName))
+            if (string.IsNullOrEmpty(lastName))
                 throw new ArgumentException("lastName");
 
-            if (String.IsNullOrEmpty(birthDate))
+            if (string.IsNullOrEmpty(birthDate))
                 throw new ArgumentException("birthDate");
 
 
