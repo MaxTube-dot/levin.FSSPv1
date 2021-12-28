@@ -73,9 +73,6 @@ namespace Fssp
 
                 var code = int.Parse(json["code"].ToString());
 
-
-
-
                 if (code == 0)
                 {
 
@@ -93,9 +90,6 @@ namespace Fssp
                 {
                     throw new ApiException("The HTTP status code of the response was not expected!", code, responseText_);
                 }
-
-
-
             }
 
         }

@@ -20,7 +20,7 @@ namespace levin.FSSPv1
 
             List<string> tasks = new List<string>();
 
-           // tasks.Add(searchClient.Physical(token: token, region: 46, firstName: "Илья", lastName: "Левин", secondName: "Владимирович", birthDate: "01.11.1999"));
+            tasks.Add(searchClient.Physical(token: token, region: 46, firstName: "Илья", lastName: "Левин", secondName: "Владимирович", birthDate: "01.11.1999"));
 
             //Генерация пользователей для группового запроса.
 
